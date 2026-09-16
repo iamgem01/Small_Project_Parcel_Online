@@ -7,6 +7,6 @@
 ## ✦ Preview
 
 <p align="center">
-  <img src="./assets/images/view.png" alt="Parcel Online Interface" width="720"/>
+  <img src="view.png" alt="Parcel Online Interface" width="720"/>
 </p>
 
