@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@layer utilities {
+  .font-pixel {
+    font-family: 'Silkscreen', monospace;
+  }
+  .font-vt323 {
+    font-family: 'VT323', monospace;
+  }
+  .font-typewriter {
+    font-family: 'Courier Prime', 'Special Elite', monospace;
+  }
+  .font-handwriting {
+    font-family: 'Patrick Hand', 'Caveat', cursive;
+  }
+  .font-serif-vintage {
+    font-family: 'Playfair Display', serif;
+  }
+
+  /* Indie pixel borders & shadows */
+  .pixel-box {
+    box-shadow: 
+      3px 0 0 0 #1e293b,
+      -3px 0 0 0 #1e293b,
+      0 3px 0 0 #1e293b,
+      0 -3px 0 0 #1e293b;
+  }
+
+  .pixel-box-blue {
+    box-shadow: 
+      2px 0 0 0 #3b82f6,
+      -2px 0 0 0 #3b82f6,
+      0 2px 0 0 #3b82f6,
+      0 -2px 0 0 #3b82f6;
+  }
+
+  /* Vintage notebook ruled paper background */
+  .bg-notebook-paper {
+    background-color: #faf8f2;
+    background-image: 
+      linear-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+    background-size: 100% 28px;
+    background-position: 0 8px;
+  }
+
+  /* Striped landscape hills with soft baby blue & mint green stripes */
+  .bg-candy-stripes {
+    background: repeating-linear-gradient(
+      -45deg,
+      #bae6fd 0px,
+      #bae6fd 14px,
+      #ffffff 14px,
+      #ffffff 22px,
+      #bbf7d0 22px,
+      #bbf7d0 36px,
+      #ffffff 36px,
+      #ffffff 44px
+    );
+  }
+
+  .bg-candy-stripes-reverse {
+    background: repeating-linear-gradient(
+      45deg,
+      #bae6fd 0px,
+      #bae6fd 14px,
+      #ffffff 14px,
+      #ffffff 22px,
+      #bbf7d0 22px,
+      #bbf7d0 36px,
+      #ffffff 36px,
+      #ffffff 44px
+    );
+  }
+}
+
+/* Custom scrollbar for sleek vintage feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 175, 210, 0.45);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 150, 195, 0.65);
+}
