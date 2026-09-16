@@ -2,8 +2,6 @@
 
 > A cozy, retro pixel-art web experience where users unlock secret airmail parcels with a PIN code.
 
----
-
 ## ✦ Preview
 
 <p align="center">
