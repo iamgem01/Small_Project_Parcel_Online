@@ -23,6 +23,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
   const [recordingSeconds, setRecordingSeconds] = useState<number>(0);
   const [isEditingTranscript, setIsEditingTranscript] = useState<boolean>(false);
   const [transcriptText, setTranscriptText] = useState<string>(voiceNote.transcript);
+  const [saveNotice, setSaveNotice] = useState<string | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const melodyControllerRef = useRef<{ stop: () => void } | null>(null);
@@ -31,6 +32,11 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
   const recordingTimerRef = useRef<NodeJS.Timeout | null>(null);
   const recordingSecondsRef = useRef<number>(0);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const triggerSaveNotice = (msg = 'ĐÃ LƯU ✓') => {
+    setSaveNotice(msg);
+    setTimeout(() => setSaveNotice(null), 3000);
+  };
 
   // Exact duration: if custom audio exists use its duration, otherwise synth demo is 9s
   const duration = recordedAudioUrl ? (audioDuration || voiceNote.durationSeconds || 1) : 9;
@@ -42,9 +48,33 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
     }
   }, [onPauseMusic]);
 
+  // Restore from dedicated voice storage on mount if prop has no audio
+  useEffect(() => {
+    if (!voiceNote.audioUrl && typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('vintage_voice_note');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.audioUrl) {
+            setRecordedAudioUrl(parsed.audioUrl);
+            if (parsed.durationSeconds) setAudioDuration(parsed.durationSeconds);
+            if (parsed.transcript) setTranscriptText(parsed.transcript);
+            if (onUpdateVoiceNote) {
+              onUpdateVoiceNote({ ...voiceNote, ...parsed });
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Restore voice note error:', e);
+      }
+    }
+  }, []);
+
   // Sync state if prop changes
   useEffect(() => {
-    setRecordedAudioUrl(voiceNote.audioUrl || null);
+    if (voiceNote.audioUrl) {
+      setRecordedAudioUrl(voiceNote.audioUrl);
+    }
     setTranscriptText(voiceNote.transcript);
     if (voiceNote.durationSeconds) {
       setAudioDuration(voiceNote.durationSeconds);
@@ -156,11 +186,13 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
           const dur = recordingSecondsRef.current || 5;
           setRecordedAudioUrl(base64Audio);
           setAudioDuration(dur);
+          triggerSaveNotice();
           if (onUpdateVoiceNote) {
             onUpdateVoiceNote({
               ...voiceNote,
               audioUrl: base64Audio,
               durationSeconds: dur,
+              transcript: transcriptText.trim() || voiceNote.transcript,
             });
           }
         };
@@ -220,11 +252,13 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       tempAudio.onloadedmetadata = () => {
         const dur = Math.round(tempAudio.duration) || 15;
         setAudioDuration(dur);
+        triggerSaveNotice();
         if (onUpdateVoiceNote) {
           onUpdateVoiceNote({
             ...voiceNote,
             audioUrl: base64Audio,
             durationSeconds: dur,
+            transcript: transcriptText.trim() || voiceNote.transcript,
           });
         }
       };
@@ -232,11 +266,13 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       tempAudio.onerror = () => {
         const dur = 15;
         setAudioDuration(dur);
+        triggerSaveNotice();
         if (onUpdateVoiceNote) {
           onUpdateVoiceNote({
             ...voiceNote,
             audioUrl: base64Audio,
             durationSeconds: dur,
+            transcript: transcriptText.trim() || voiceNote.transcript,
           });
         }
       };
@@ -257,6 +293,10 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
     setRecordedAudioUrl(null);
     setCurrentTime(0);
     setAudioDuration(9);
+    try {
+      localStorage.removeItem('vintage_voice_note');
+    } catch {}
+    triggerSaveNotice('ĐÃ XÓA GHI ÂM');
     if (onUpdateVoiceNote) {
       onUpdateVoiceNote({
         ...voiceNote,
@@ -268,9 +308,12 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
 
   const handleSaveTranscript = () => {
     setIsEditingTranscript(false);
+    triggerSaveNotice();
     if (onUpdateVoiceNote) {
       onUpdateVoiceNote({
         ...voiceNote,
+        audioUrl: recordedAudioUrl || voiceNote.audioUrl,
+        durationSeconds: audioDuration || voiceNote.durationSeconds,
         transcript: transcriptText.trim() || voiceNote.transcript,
       });
     }
@@ -288,9 +331,21 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       {/* Header Bar */}
       <div className="flex items-center justify-between border-b-2 border-slate-300 pb-2 mb-3">
         <div>
-          <h4 className="font-pixel text-[10px] text-sky-950 uppercase tracking-wider">
-            {voiceNote.title}
-          </h4>
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <h4 className="font-pixel text-[10px] text-sky-950 uppercase tracking-wider">
+              {voiceNote.title}
+            </h4>
+            {saveNotice && (
+              <span className="font-pixel text-[7px] bg-emerald-100 text-emerald-800 border border-emerald-600 px-1 py-0.5">
+                {saveNotice}
+              </span>
+            )}
+            {(recordedAudioUrl || voiceNote.audioUrl) && !saveNotice && (
+              <span className="font-pixel text-[7px] bg-sky-100 text-sky-800 border border-sky-600 px-1 py-0.5" title="Audio data saved">
+                VOICE SAVED
+              </span>
+            )}
+          </div>
           <span className="text-[10px] text-slate-500 font-mono">{voiceNote.date}</span>
         </div>
 

@@ -1,6 +1,14 @@
 import type { IncomingMessage, ServerResponse } from 'http';
 import { getAllCards, createCard } from '../../server/cloudStorage.js';
 
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '50mb',
+    },
+  },
+};
+
 export default async function handler(req: any, res: any) {
   // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CardConfig, SongItem } from '../types';
 import { motion } from 'motion/react';
 
@@ -20,6 +20,13 @@ export const CardCustomizerModal: React.FC<CardCustomizerModalProps> = ({
   const [songTitle, setSongTitle] = useState<string>('');
   const [songArtist, setSongArtist] = useState<string>('');
   const [isCopied, setIsCopied] = useState<boolean>(false);
+
+  // Sync formData whenever modal opens or external config changes
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(config);
+    }
+  }, [isOpen, config]);
 
   if (!isOpen) return null;
 
@@ -71,7 +78,11 @@ export const CardCustomizerModal: React.FC<CardCustomizerModalProps> = ({
   };
 
   const handleSaveAndClose = () => {
-    onSave(formData);
+    onSave({
+      ...formData,
+      // Always preserve latest voice note so settings modal never overwrites audio
+      voiceNote: config.voiceNote,
+    });
     onClose();
   };
 

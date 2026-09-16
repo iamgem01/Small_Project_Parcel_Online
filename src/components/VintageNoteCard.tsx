@@ -285,6 +285,8 @@ export const VintageNoteCard: React.FC<VintageNoteCardProps> = ({
               <VoiceNotePlayer
                 voiceNote={config.voiceNote}
                 onUpdateVoiceNote={readOnly ? undefined : onUpdateVoiceNote}
+                onPauseMusic={onPauseMusic}
+                readOnly={readOnly}
               />
             </div>
           </div>
