@@ -352,7 +352,7 @@ export default function App() {
             ⬆
           </button>
 
-          {/* Customize only visible in creator mode (hidden for recipient) */}
+          /* {/* Customize only visible in creator mode (hidden for recipient) */}
           {!isRecipientMode && (
             <button
               id="open-settings-btn"
@@ -363,7 +363,7 @@ export default function App() {
             >
               ⚙
             </button>
-          )}
+          )} */
         </div>
       </header>
 
