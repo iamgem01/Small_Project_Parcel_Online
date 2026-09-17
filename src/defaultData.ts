@@ -73,7 +73,7 @@ I know you love yourself but i’m still wishing you with a strong body, good he
     },
     {
       id: 'photo-default-10',
-      url: '/agu2.png',
+      url: '/agu2.jpg',
       caption: 'Hishiam Perverttt',
       "date": "August, 2, 2026",
     },
