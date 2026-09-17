@@ -352,18 +352,7 @@ export default function App() {
             ⬆
           </button>
 
-          {/* Customize only visible in creator mode (hidden for recipient) */}
-          {!isRecipientMode && (
-            <button
-              id="open-settings-btn"
-              type="button"
-              onClick={() => setIsCustomizerOpen(true)}
-              className="w-7 h-7 bg-sky-100 hover:bg-sky-200 text-sky-950 border border-slate-900 transition flex items-center justify-center cursor-pointer text-base leading-none"
-              title="Card settings & customizer"
-            >
-              ⚙
-            </button>
-          )}
+          {/* Nút Customize (bánh răng ⚙) đã được ẩn vì dữ liệu đã chốt trong defaultData.ts */}
         </div>
       </header>
 
