@@ -111,44 +111,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({
           </button>
         </div>
 
-        {/* ── Save to Server Section ── */}
-        <div className="mb-4 bg-sky-50 border-2 border-sky-700 p-3 shadow-[2px_2px_0px_0px_#0369a1]">
-          <div className="flex items-center gap-1.5 text-sky-950 font-pixel text-[10px] font-bold mb-2">
-            <span>[ ★ ]</span>
-            <span>Sync</span>
-          </div>
-
-          {savedCardId && (
-            <div className="mb-2 flex items-center gap-2 bg-white border border-sky-300 px-2 py-1.5">
-              <span className="font-pixel text-[9px] text-slate-500">CARD ID:</span>
-              <span className="font-mono text-xs font-bold text-sky-700 tracking-widest">
-                {savedCardId}
-              </span>
-              <span className="ml-auto font-pixel text-[8px] text-emerald-600">✓ Synced</span>
-            </div>
-          )}
-
-          <button
-            type="button"
-            onClick={handleSaveToServer}
-            disabled={saveStatus === 'saving'}
-            className={`w-full py-2 font-pixel text-[10px] border-2 border-slate-900 shadow-[2px_2px_0px_0px_#0f172a] transition flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed ${
-              saveStatus === 'saved'
-                ? 'bg-emerald-200 text-emerald-950'
-                : saveStatus === 'error'
-                  ? 'bg-red-200 text-red-950'
-                  : 'bg-sky-500 hover:bg-sky-600 text-white'
-            }`}
-          >
-            {saveStatus === 'saving' && <span>⟳ Syncing...</span>}
-            {saveStatus === 'saved' && <span>✓ Synced successfully!</span>}
-            {saveStatus === 'error' && <span>✕ Error — Try again</span>}
-            {saveStatus === 'idle' && (
-              <span>{savedCardId ? '↑ Update on server' : '↑ Deploy to server'}</span>
-            )}
-          </button>
-        </div>
-
         {/* Recipient Details Preview */}
         <div className="bg-stone-100 border border-slate-400 p-3 mb-4 space-y-1.5 text-xs font-typewriter">
           <div className="flex justify-between text-slate-700">
@@ -170,7 +132,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         {/* Share Link Input & Copy */}
         <div className="space-y-2 mb-4">
           <label className="block font-pixel text-[9px] text-slate-800 font-bold">
-            SHAREABLE LINK FOR RECIPIENT (READ-ONLY):
+            SHAREABLE LINK FOR RECIPIENT:
           </label>
           <div className="flex gap-2">
             <input
@@ -206,30 +168,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({
           </button>
         </div>
 
-        {/* Test Mode Preview Button */}
-        <div className="pt-3 border-t-2 border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <button
-            type="button"
-            onClick={() => {
-              onToggleRecipientMode(!isRecipientMode);
-              onClose();
-            }}
-            className={`w-full sm:w-auto px-3 py-1.5 font-pixel text-[9px] border-2 border-slate-900 transition flex items-center justify-center gap-1 cursor-pointer ${
-              isRecipientMode
-                ? 'bg-amber-200 hover:bg-amber-300 text-amber-950'
-                : 'bg-stone-200 hover:bg-stone-300 text-slate-800'
-            }`}
-          >
-            <span>{isRecipientMode ? '✦' : '★'}</span>
-            <span>
-              {isRecipientMode ? 'EDIT MODE' : 'PREVIEW'}
-            </span>
-          </button>
-
+        {/* Close Button */}
+        <div className="pt-3 border-t-2 border-slate-200 flex justify-end">
           <button
             type="button"
             onClick={onClose}
-            className="w-full sm:w-auto px-4 py-1.5 bg-slate-900 text-white font-pixel text-[10px] hover:bg-slate-800 cursor-pointer"
+            className="w-full sm:w-auto px-5 py-2 bg-slate-900 text-white font-pixel text-[10px] hover:bg-slate-800 cursor-pointer shadow-[2px_2px_0px_0px_#0f172a]"
           >
             CLOSE
           </button>

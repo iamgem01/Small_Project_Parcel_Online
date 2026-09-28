@@ -244,7 +244,7 @@ export const VintageNoteCard: React.FC<VintageNoteCardProps> = ({
                   customPhotoUrl={config.flowerPhotoUrl}
                   showMeaning={true}
                   initialMode="illustration"
-                  onUpdateFlowerPhoto={onUpdateFlowerPhoto}
+                  onUpdateFlowerPhoto={readOnly ? undefined : onUpdateFlowerPhoto}
                   readOnly={readOnly}
                   bouquetTitle={config.bouquetTitle}
                   bouquetMeaning={config.bouquetMeaning}
@@ -296,13 +296,15 @@ export const VintageNoteCard: React.FC<VintageNoteCardProps> = ({
             <div>
               <div className="border-2 border-slate-900 bg-emerald-100 px-3.5 py-1 shadow-[2px_2px_0px_0px_#0f172a] mb-3 inline-block">
                 <span className="font-pixel text-xs font-semibold tracking-wider text-emerald-950">
-                  [ ★ SPOTIFY SOUNDTRACK ]
+                  [ ★ MUSIC BOX ★ ]
                 </span>
               </div>
 
               <SpotifyPlayer
                 trackId={config.spotifyTrackId || '1kPpge9JDLpcj15qgrPbYX'}
                 spotifyUrl={config.spotifyUrl || 'https://open.spotify.com/track/1kPpge9JDLpcj15qgrPbYX?si=ae31586e710e48bc'}
+                playlistId={config.spotifyPlaylistId || '36rjCoyee7zNGXIUyEhqbm'}
+                playlistUrl={config.spotifyPlaylistUrl || 'https://open.spotify.com/playlist/36rjCoyee7zNGXIUyEhqbm?si=QSO8nAlGTIKO-IbMESfmlQ'}
               />
             </div>
 

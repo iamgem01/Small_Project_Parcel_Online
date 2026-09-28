@@ -53,6 +53,8 @@ export interface CardConfig {
   playlist: SongItem[];
   spotifyTrackId?: string;
   spotifyUrl?: string;
+  spotifyPlaylistId?: string;
+  spotifyPlaylistUrl?: string;
   bgMusicYoutubeId?: string;
   bgMusicStartTime?: number;
   coupon?: PromiseCoupon;

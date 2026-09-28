@@ -7,6 +7,7 @@ import { VintageNoteCard } from './components/VintageNoteCard';
 import { CardCustomizerModal } from './components/CardCustomizerModal';
 import { ShareModal } from './components/ShareModal';
 import { StarryBackground } from './components/StarryBackground';
+import { BackgroundMusicManager } from './components/BackgroundMusicManager';
 
 // ─── Server API helpers ─────────────────────────────────────────
 const API_BASE = '/api/cards';
@@ -52,64 +53,34 @@ export default function App() {
           const encoded = hash.replace('#card=', '');
           const parsed = JSON.parse(decodeURIComponent(escape(atob(encoded))));
           baseConfig = { ...DEFAULT_CARD_CONFIG, ...parsed };
-        } else {
-          const saved = localStorage.getItem('vintage_card_config');
-          if (saved) {
-            const parsed = JSON.parse(saved);
-            // If previous session used old passcode '1601', prioritize updated default '2909'
-            if (parsed.passcode === '1601') {
-              baseConfig = DEFAULT_CARD_CONFIG;
-            } else {
-              const cleanedPhotos = (parsed.photos || []).filter(
-              (p: any) => p.id !== 'photo-1' && p.id !== 'photo-2'
-            );
-            const flowerPhoto = parsed.flowerPhotoUrl && !parsed.flowerPhotoUrl.includes('unsplash')
-              ? parsed.flowerPhotoUrl
-              : DEFAULT_CARD_CONFIG.flowerPhotoUrl;
-
-            baseConfig = {
-              ...DEFAULT_CARD_CONFIG,
-              ...parsed,
-              flowerPhotoUrl: flowerPhoto,
-              photos: cleanedPhotos.length > 0 ? cleanedPhotos : DEFAULT_CARD_CONFIG.photos,
-            };
-            }
-          }
         }
-
-        // Hydrate voice note from isolated key if present and base has no audio
-        const savedVoice = localStorage.getItem('vintage_voice_note');
-        if (savedVoice) {
-          try {
-            const parsedVoice = JSON.parse(savedVoice);
-            if (parsedVoice?.audioUrl && !baseConfig.voiceNote?.audioUrl) {
-              baseConfig = {
-                ...baseConfig,
-                voiceNote: { ...baseConfig.voiceNote, ...parsedVoice },
-              };
-            }
-          } catch {}
-        }
-
         return baseConfig;
       } catch (e) {
-        console.warn('Could not parse saved config:', e);
+        console.warn('Could not parse config:', e);
       }
     }
     return DEFAULT_CARD_CONFIG;
   });
 
-  const [isRecipientMode, setIsRecipientMode] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const params = new URLSearchParams(window.location.search);
-      return (
-        params.get('view') === 'recipient' ||
-        params.get('mode') === 'view' ||
-        params.get('readonly') === 'true'
-      );
+  // Always keep state in sync when user edits defaultData.ts (Vite HMR support)
+  useEffect(() => {
+    const hash = typeof window !== 'undefined' ? window.location.hash : '';
+    if (!hash.startsWith('#card=')) {
+      setConfig(DEFAULT_CARD_CONFIG);
     }
-    return false;
-  });
+  }, [DEFAULT_CARD_CONFIG]);
+
+  // Clear any old stale test cache from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('vintage_card_config');
+        localStorage.removeItem('vintage_voice_note');
+      } catch {}
+    }
+  }, []);
+
+  const [isRecipientMode, setIsRecipientMode] = useState<boolean>(true);
 
   const [stage, setStage] = useState<'locked' | 'dropping' | 'unpacked'>('locked');
   const [currentSongIndex, setCurrentSongIndex] = useState<number>(0);
@@ -159,14 +130,7 @@ export default function App() {
     }
   }, []);
 
-  // Lưu vào localStorage mỗi khi config thay đổi (backup)
-  useEffect(() => {
-    try {
-      localStorage.setItem('vintage_card_config', JSON.stringify(config));
-    } catch (e) {
-      console.warn('localStorage card_config write error:', e);
-    }
-  }, [config]);
+
 
   /** Lưu card lên server (gọi từ ShareModal) */
   const handleSaveToServer = useCallback(async (): Promise<string | null> => {
@@ -308,11 +272,6 @@ export default function App() {
       <header className="w-full max-w-md flex items-center justify-between py-2 px-3.5 mb-2.5 text-xs bg-[#faf7ee] border-2 border-slate-900 shadow-[3px_3px_0px_0px_#1e293b] z-30 font-pixel">
         <div className="font-bold tracking-wider text-sky-950 text-[10px] flex items-center gap-1.5">
           <span>★ PARCEL ONLINE ★</span>
-          {isRecipientMode && (
-            <span className="bg-emerald-100 text-emerald-800 text-[7px] px-1.5 py-0.5 border border-emerald-700">
-              [LOCKED]
-            </span>
-          )}
         </div>
 
         <div className="flex items-center gap-1.5 text-[9px]">
@@ -342,37 +301,17 @@ export default function App() {
             </button>
           )}
 
-          {/* Share / Publish modal trigger */}
-          <button
-            type="button"
-            onClick={() => setIsShareModalOpen(true)}
-            className="w-7 h-7 bg-amber-100 hover:bg-amber-200 text-amber-950 border border-slate-900 transition flex items-center justify-center cursor-pointer text-base leading-none"
-            title="Share & publish"
-          >
-            ⬆
-          </button>
-
-          {/* Nút Customize (bánh răng ⚙) đã được ẩn vì dữ liệu đã chốt trong defaultData.ts */}
+          {/* Nút Share (⬆) và Customize (⚙) đã được ẩn để giao diện hoàn toàn tinh gọn */}
         </div>
       </header>
 
-      {/* Global Background Audio Stream across entire website */}
-      <div className="sr-only pointer-events-none" aria-hidden="true">
-        <iframe
-          key={`${activeYoutubeId}-${isPlayingMusic}-${activeStartTime}`}
-          id="global-background-audio"
-          width="200"
-          height="200"
-          src={`https://www.youtube-nocookie.com/embed/${activeYoutubeId}?autoplay=${
-            isPlayingMusic ? 1 : 0
-          }&start=${activeStartTime}&loop=1&playlist=${activeYoutubeId}&controls=0&mute=0&playsinline=1&enablejsapi=1&origin=${
-            typeof window !== 'undefined' ? window.location.origin : ''
-          }`}
-          title="Background Music Stream"
-          allow="autoplay; encrypted-media"
-          className="w-0 h-0 opacity-0"
-        />
-      </div>
+      {/* Global Background Audio Stream across entire website with Smooth Fade In & Fade Out */}
+      <BackgroundMusicManager
+        youtubeId={activeYoutubeId}
+        startTime={activeStartTime}
+        isPlaying={isPlayingMusic}
+        targetVolume={50}
+      />
 
       {/* Dynamic Views by Stage */}
       <div className="w-full flex-1 flex flex-col items-center justify-center">
@@ -411,7 +350,7 @@ export default function App() {
             onResetToLock={handleReset}
             onRedeemCoupon={handleRedeemCoupon}
             onUpdateFlowerPhoto={handleUpdateFlowerPhoto}
-            readOnly={isRecipientMode}
+            readOnly={true}
             onOpenShare={() => setIsShareModalOpen(true)}
           />
         )}
@@ -427,16 +366,6 @@ export default function App() {
         onSaveToServer={handleSaveToServer}
         serverCardId={serverCardId}
       />
-
-      {/* Card Customizer Modal (Only in edit mode) */}
-      {!isRecipientMode && (
-        <CardCustomizerModal
-          config={config}
-          isOpen={isCustomizerOpen}
-          onClose={() => setIsCustomizerOpen(false)}
-          onSave={handleSaveConfig}
-        />
-      )}
     </main>
   );
 }

@@ -41,13 +41,6 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
   // Exact duration: if custom audio exists use its duration, otherwise synth demo is 9s
   const duration = recordedAudioUrl ? (audioDuration || voiceNote.durationSeconds || 1) : 9;
 
-  // When VoiceNotePlayer opens, automatically turn off / pause background music
-  useEffect(() => {
-    if (onPauseMusic) {
-      onPauseMusic();
-    }
-  }, [onPauseMusic]);
-
   // Restore from dedicated voice storage on mount if prop has no audio
   useEffect(() => {
     if (!voiceNote.audioUrl && typeof window !== 'undefined') {
@@ -340,7 +333,7 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
                 {saveNotice}
               </span>
             )}
-            {(recordedAudioUrl || voiceNote.audioUrl) && !saveNotice && (
+            {!readOnly && (recordedAudioUrl || voiceNote.audioUrl) && !saveNotice && (
               <span className="font-pixel text-[7px] bg-sky-100 text-sky-800 border border-sky-600 px-1 py-0.5" title="Audio data saved">
                 VOICE SAVED
               </span>
@@ -408,14 +401,16 @@ export const VoiceNotePlayer: React.FC<VoiceNotePlayerProps> = ({
       </div>
 
       {/* Audio Status Pill */}
-      <div className="mb-2 flex items-center justify-between text-[8px] font-pixel">
-        <span className={recordedAudioUrl ? 'text-emerald-700 font-bold' : 'text-slate-500'}>
-          {recordedAudioUrl ? '✓ CUSTOM AUDIO SAVED' : '♫ DEFAULT SYNTH MELODY'}
-        </span>
-        <span className="text-slate-400">
-          {recordedAudioUrl ? `${duration}s RECORDED` : '9s DEMO'}
-        </span>
-      </div>
+      {!readOnly && (
+        <div className="mb-2 flex items-center justify-between text-[8px] font-pixel">
+          <span className={recordedAudioUrl ? 'text-emerald-700 font-bold' : 'text-slate-500'}>
+            {recordedAudioUrl ? '✓ CUSTOM AUDIO SAVED' : '♫ DEFAULT SYNTH MELODY'}
+          </span>
+          <span className="text-slate-400">
+            {recordedAudioUrl ? `${duration}s RECORDED` : '9s DEMO'}
+          </span>
+        </div>
+      )}
 
       {/* Retro Cassette Spools & Waveform */}
       <div className="bg-[#1e293b] border-2 border-slate-950 p-3 text-slate-200 shadow-inner mb-3">

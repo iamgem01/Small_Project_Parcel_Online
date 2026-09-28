@@ -489,7 +489,7 @@ export const ParachuteDropScene: React.FC<ParachuteDropSceneProps> = ({
       {/* Footer in English */}
       <div className="relative z-10 pb-4 text-center">
         <p className="text-[10px] text-slate-600 font-pixel tracking-widest opacity-90">
-         • DELIVERING HAPPINESS •
+        • DELIVERING CUTENESS •
         </p>
       </div>
     </div>

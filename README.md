@@ -1,4 +1,4 @@
-# 📦 Parcel Online — Secret Parcel Airmail
+# 📦 Secret Parcel Airmail
 > A cozy, retro pixel-art web experience where users unlock secret airmail parcels with a PIN code.
 
 ## ✦ Preview

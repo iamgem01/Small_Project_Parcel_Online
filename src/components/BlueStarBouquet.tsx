@@ -44,7 +44,7 @@ export const BlueStarBouquet: React.FC<BlueStarBouquetProps> = ({
   onUpdateFlowerPhoto,
   readOnly = false,
   bouquetTitle = 'A gentle bouquet of Blue Stars',
-  bouquetMeaning = 'Symbolizing everlasting trust, genuine sincerity, and a quiet love as pure as the morning sky.',
+  bouquetMeaning = 'Wishing you good health, complete happiness, the love and trust of those around you.',
 }) => {
   const [viewMode, setViewMode] = useState<'illustration' | 'photo'>(
     customPhotoUrl ? 'photo' : initialMode
@@ -102,7 +102,7 @@ export const BlueStarBouquet: React.FC<BlueStarBouquetProps> = ({
       >
         {/* Pixel style washi tape at top */}
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-24 h-5 bg-sky-200 border-2 border-slate-900 shadow-[2px_2px_0px_0px_#0f172a] z-10 font-pixel text-[8px] text-slate-900 flex items-center justify-center tracking-wider">
-          ★ GOODIE ★
+          ★ Tweedia ★
         </div>
 
         {/* Change Photo button — only in edit mode */}
@@ -241,15 +241,13 @@ export const BlueStarBouquet: React.FC<BlueStarBouquetProps> = ({
         {/* Indie RPG Item Stats Box */}
         <div className="w-full mt-2.5 bg-sky-50/90 border-2 border-slate-900 p-2 text-left font-pixel text-[9px] text-slate-800 space-y-1 shadow-[2px_2px_0px_0px_#0f172a]">
           <div className="flex justify-between items-center text-sky-950 font-bold border-b border-sky-200 pb-0.5">
-            <span>[ ITEM: BLUE STAR BOUQUET ]</span>
+            <span>[ BLUE STAR BOUQUET ]</span>
             <span className="text-amber-500">★★★★★</span>
           </div>
           <p className="text-[8px] text-slate-600">
-            BOTANICAL: Oxypetalum Caeruleum (Tweedia)
+            Oxypetalum Caeruleum (Tweedia)
           </p>
           <div className="flex justify-between text-[8px] text-blue-700 font-bold">
-            <span>STATUS: BLOOMING</span>
-            <span>BUFF: +100 HAPPINESS</span>
           </div>
         </div>
 
@@ -257,7 +255,7 @@ export const BlueStarBouquet: React.FC<BlueStarBouquetProps> = ({
         {showMeaning && (
           <div className="mt-2.5 pt-2 border-t border-slate-300 w-full text-center">
             <p className="font-handwriting text-xl text-sky-950 font-bold leading-tight">
-              "{bouquetTitle}"
+              {bouquetTitle}
             </p>
             <p className="font-typewriter text-[10px] text-slate-600 mt-1 leading-relaxed italic px-1">
               "{bouquetMeaning}"

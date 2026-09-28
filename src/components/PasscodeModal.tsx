@@ -225,7 +225,7 @@ export const PasscodeModal: React.FC<PasscodeModalProps> = ({
 
         {/* Footer */}
         <div className="text-center pt-3 border-t-2 border-slate-200 flex items-center justify-center font-pixel text-[10px]">
-          <span className="text-slate-400 tracking-wider">★ 2026 WITH LOVE ★</span>
+          <span className="text-slate-400 tracking-wider">★ 2026 By Gem ★</span>
         </div>
       </motion.div>
     </div>

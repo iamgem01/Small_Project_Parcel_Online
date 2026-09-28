@@ -354,7 +354,7 @@ export const GoodiesBoxView: React.FC<GoodiesBoxViewProps> = ({
               {activeGoodie === 'flower' && (
                 <div className="flex flex-col items-center text-center">
                   <div className="inline-flex items-center gap-1.5 bg-sky-100 border-2 border-slate-900 px-3 py-1 font-pixel text-[10px] text-sky-950 font-bold mb-3 shadow-[2px_2px_0px_0px_#0f172a]">
-                    <span>★ BLUE STAR BOUQUET ★</span>
+                    <span>★ FLOWERs ★</span>
                   </div>
 
                   {/* BlueStarBouquet — same as letter view, click for sparkles */}
@@ -363,7 +363,7 @@ export const GoodiesBoxView: React.FC<GoodiesBoxViewProps> = ({
                       customPhotoUrl={config.flowerPhotoUrl}
                       showMeaning={true}
                       initialMode={config.flowerStyle === 'photo' ? 'photo' : 'illustration'}
-                      onUpdateFlowerPhoto={onUpdateFlowerPhoto}
+                      onUpdateFlowerPhoto={readOnly ? undefined : onUpdateFlowerPhoto}
                       readOnly={readOnly}
                       bouquetTitle={config.bouquetTitle}
                       bouquetMeaning={config.bouquetMeaning}
@@ -389,7 +389,7 @@ export const GoodiesBoxView: React.FC<GoodiesBoxViewProps> = ({
               {activeGoodie === 'letter' && (
                 <div>
                   <div className="inline-flex items-center gap-1.5 bg-amber-100 border-2 border-slate-900 px-3 py-1 font-pixel text-[10px] text-amber-950 font-bold mb-3 shadow-[2px_2px_0px_0px_#0f172a]">
-                    <span>★ HEARTFELT LETTER ★</span>
+                    <span>★ LETTER ★</span>
                   </div>
                   <div className="bg-[#fffdfa] border-3 border-slate-900 p-5 shadow-[4px_4px_0px_0px_#1e293b]">
                     <h3 className="font-handwriting text-2xl text-stone-800 font-bold mb-3">
@@ -463,7 +463,7 @@ export const GoodiesBoxView: React.FC<GoodiesBoxViewProps> = ({
                 <div>
                   <div className="text-center mb-4">
                     <div className="inline-flex items-center gap-1.5 bg-emerald-100 border-2 border-slate-900 px-3 py-1 font-pixel text-[10px] text-emerald-950 font-bold shadow-[2px_2px_0px_0px_#0f172a]">
-                      <span>★ SPOTIFY SOUNDTRACK ★</span>
+                      <span>★ SPOTIFY MUSIC ★</span>
                     </div>
                     <p className="font-typewriter text-xs text-slate-600 mt-1">
                       A special tune selected for {config.recipient}
@@ -473,6 +473,8 @@ export const GoodiesBoxView: React.FC<GoodiesBoxViewProps> = ({
                   <SpotifyPlayer
                     trackId={config.spotifyTrackId || '1kPpge9JDLpcj15qgrPbYX'}
                     spotifyUrl={config.spotifyUrl || 'https://open.spotify.com/track/1kPpge9JDLpcj15qgrPbYX?si=ae31586e710e48bc'}
+                    playlistId={config.spotifyPlaylistId || '36rjCoyee7zNGXIUyEhqbm'}
+                    playlistUrl={config.spotifyPlaylistUrl || 'https://open.spotify.com/playlist/36rjCoyee7zNGXIUyEhqbm?si=QSO8nAlGTIKO-IbMESfmlQ'}
                   />
                 </div>
               )}
